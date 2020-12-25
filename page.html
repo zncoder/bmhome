@@ -33,7 +33,7 @@
 									class="entry-link"
 									@click="selectEntry(ei)"
 									:href="ei.url">
-									<img class="favicon" :src="ei.favIcon" alt=""> {{ei.title}}
+									<img class="favicon" :src="ei.favIcon" alt="" @error="setAltImg"> {{ei.title}}
 								</a>
 								<a class="removelink" href="#" @click="removeEntry(ei)">⨯</a>
 							</li>

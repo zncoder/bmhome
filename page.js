@@ -10,6 +10,7 @@ var vm = new Vue({
 		selectFirstEntry: selectFirstEntry,
 		selectEntry: ei => selectEntry(ei),
 		removeEntry: ei => removeEntry(ei),
+		setAltImg: ev => {ev.target.src = "icons/favicon.png"},
 	},
 })
 
