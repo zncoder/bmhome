@@ -6,6 +6,9 @@ async function bookmarkTab() {
 	}
 	let bn = await u.newBookmark({parentId: folderId, index: 0, title: tab.title, url: tab.url})
 	await u.dedupBookmark(folderId, bn.id, tab.url)
+
+	chrome.browserAction.setBadgeText({text: "★"})
+	setTimeout(() => chrome.browserAction.setBadgeText({text: ""}), 1000)
 }
 
 function specialPage(url) {
