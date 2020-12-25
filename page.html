@@ -23,7 +23,7 @@
 					<div
 						class="column"
 						:class="[col.cls]">
-						<h3 class="col-name">{{col.title}}</h3>
+						<h4 class="col-name">{{col.title}} [{{col.entries.length}}]</h4>
 						<ul>
 							<li
 								v-for="ei in col.entries" :key="ei.id"
