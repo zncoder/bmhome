@@ -8,7 +8,7 @@ body {
 		top: 0px;
 		left: 0px;
 		z-index: 2;
-		font-size: 1.1em;
+		font-size: 1em;
 		background-color: ghostwhite;
 		width: 100%;
 		padding: 2px;
@@ -24,8 +24,7 @@ body {
 
 .hdr-box {
 		flex: 8;
-		font-size: 1.1em;
-		background-color: ghostwhite;
+		font-size: 1em;
 		outline: 0px;
 		border: solid #bbbbbb;
 		border-radius: 24px;

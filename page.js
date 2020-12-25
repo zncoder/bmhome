@@ -10,7 +10,7 @@ var vm = new Vue({
 		selectFirstEntry: selectFirstEntry,
 		selectEntry: ei => selectEntry(ei),
 		removeEntry: ei => removeEntry(ei),
-		setAltImg: ev => {ev.target.src = "icons/favicon.png"},
+		setAltImg: ev => {ev.target.src = u.favIcon},
 	},
 })
 
@@ -37,7 +37,7 @@ function newEntry(id, title, favIcon, url) {
 	return {
 		id: id,
 		title: title,
-		favIcon: favIcon,
+		favIcon: favIcon || u.favIcon,
 		url: url,
 		unmatched: false,
 		removed: false,

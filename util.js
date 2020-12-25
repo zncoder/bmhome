@@ -33,4 +33,5 @@ var u = {
   bmHistoryTitle: "history-bn4yaq",
   folderId: () => u.findBookmarkId(u.bmTitle),
   historyId: () => u.findBookmarkId(u.bmHistoryTitle),
+	favIcon: "icons/favicon.png",
 }
