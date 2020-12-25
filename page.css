@@ -1,0 +1,100 @@
+body {
+		font-size: 1em;
+		font-family: sans-serif;
+}
+
+#header {
+		position: fixed;
+		top: 0px;
+		left: 0px;
+    z-index: 2;
+    font-size: 1.1em;
+    background-color: ghostwhite;
+    width: 100%;
+    padding: 0;
+    letter-spacing: 1px;
+		display: flex;
+}
+
+.hdr-span {
+		margin: 4px;
+		font-size: 0.8em;
+		flex: 1;
+}
+
+.hdr-box {
+		flex: 6;
+		font-size: 1.1em;
+		background-color: ghostwhite;
+		outline: 0px;
+		border: solid ghostwhite;
+		border-radius: 4px;
+}
+
+.hdr-box:focus {
+		border: solid #9AABE9;
+		border-radius: 4px;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.column {
+		display: inline-block;
+		width: 45%;
+		vertical-align: top;
+		box-sizing: border-box;
+		padding: 10px 0 20px 0;
+		margin-left: 1em;
+		/* margin-top: 1em; */
+}
+
+.unmatched, .removed {
+		display: none;
+}
+
+.favicon {
+		width: 0.8em;
+		height: 0.8em;
+		vertical-align: middle;
+}
+
+.col-name {
+		margin-top: 1em;
+		color: #555;
+}
+
+li {
+		padding: 1px;
+		/* important to not overflow */
+		white-space: nowrap;
+}
+
+a {
+		text-decoration: none;
+		color: #555;
+		line-height: 1.5;
+}
+
+.entry-link {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: inline-block;
+		width: 96%;
+}
+
+li:hover {
+		color: #000;
+		background-color: #E4F4FF;
+}
+
+.removelink {
+		visibility: hidden;
+		float: right;
+}
+
+li:hover > .removelink {
+		visibility: visible;
+}

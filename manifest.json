@@ -1,0 +1,21 @@
+{
+  "name": "BMHome",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "Show bookmarks and open tabs in homepage",
+  "icons": {
+    "48": "icons/48.png"
+  },
+	"permissions": [ "tabs", "bookmarks" ],
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"chrome_url_overrides" : {
+    "newtab": "page.html"
+  },
+  "background": {
+    "scripts": [ "util.js", "background.js" ]
+  },
+	"browser_action": {
+		"default_icon": "icons/32.png",
+		"default_title": "Click to put this tab to bookmark"
+	}
+}

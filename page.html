@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="page.css">
+  </head>
+	<body>
+		<div id="app">
+			<div id="header">
+				<span class="hdr-span"></span>
+				<input
+					ref="searchbox"
+					class="hdr-box"
+					autocomplete="off"
+					placeholder="Type words to search open tabs or bookmarks"
+					v-model="searchWords"
+					@keyup="matchEntries"
+					@keyup.enter="selectFirstEntry" />
+				<span class="hdr-span"></span>
+			</div>
+			<div id="content">
+				<template v-for="col in columns">
+					<div
+						class="column"
+						:class="[col.cls]">
+						<h3 class="col-name">{{col.title}}</h3>
+						<ul>
+							<li
+								v-for="ei in col.entries" :key="ei.id"
+								:class="{unmatched: ei.unmatched, removed: ei.removed}">
+								<a
+									:id="ei.id"
+									class="entry-link"
+									@click="selectEntry(ei)"
+									:href="ei.url">
+									<img class="favicon" :src="ei.favIcon" alt=""> {{ei.title}}
+								</a>
+								<a class="removelink" href="#" @click="removeEntry(ei)">⨯</a>
+							</li>
+						</ul>
+					</div>
+				</template>
+			</div>
+		</div>
+	</body>
+	<script src="vue2.6.12.js"></script>
+	<script src="util.js"></script>
+	<script src="page.js"></script>
+</html>
