@@ -100,6 +100,7 @@ async function matchEntries() {
 }
 
 function selectFirstEntry() {
+	//console.log("selectfirstentry")
 	for (let col of vm.columns) {
 		for (let ei of col.entries) {
 			if (!ei.unmatched) {
@@ -114,8 +115,9 @@ function selectEntry(ei) {
 	//console.log("selectentry"); console.log(ei)
 	if (ei.id.startsWith("t-")) {
 		gotoTab(parseInt(ei.id.substring(2)))
+	} else {
+		window.location = ei.url
 	}
-	// bookmark will click through
 }
 
 async function gotoTab(tid) {
