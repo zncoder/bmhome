@@ -7,7 +7,7 @@ var u = {
   },
   currentWindow: () => new Promise(r => chrome.windows.getCurrent({populate: true}, x => r(x))),
   newBookmark: (arg) => new Promise(r => chrome.bookmarks.create(arg, x => r(x))),
-  removeBookmark: (id) => new Promise(r => chrome.bookmarks.remove(id, x => r(x))),
+  deleteBookmark: (id) => new Promise(r => chrome.bookmarks.remove(id, x => r(x))),
   listBookmarks: (folder) => new Promise(r => chrome.bookmarks.getChildren(folder, x => r(x))),
   findBookmarkId: async (title) => {
 	  let items = await new Promise(r => chrome.bookmarks.search({title: title}, x => r(x)))
@@ -21,17 +21,57 @@ var u = {
     }
   },
   dedupBookmark: async (folder, keep, url) => {
+		//console.log(`dedup ${folder}:${url}`)
     let items = await u.listBookmarks(folder)
 	  for (let x of items) {
 		  if (x.id !== keep && x.url === url) {
-			  u.removeBookmark(x.id)
+			  u.deleteBookmark(x.id)
 		  }
 	  }
   },
+	addBookmark: async (title, url) => {
+		//console.log(`addbookmark: ${title},${url}`)
+		let folder = await u.folderId()
+		let bn = await u.newBookmark({parentId: folder, index: 0, title: title, url: url})
+		await u.dedupBookmark(folder, bn.id, url)
+		return bn
+	},
+	removeBookmark: async (id, title, url) => {
+		//console.log(`removebookmark: ${id},${title}`)
+		let history = await u.historyId()
+		let bn = await u.newBookmark({parentId: history, index: 0, title: title, url: url})
+		await u.dedupBookmark(history, bn.id, url)
+		await u.deleteBookmark(id)
+	},
+	initBookmarkId: async () => {
+		u.folderId_ = await u.findBookmarkId(u.bmTitle)
+		if (u.folderId_ === "") {
+			let bn = await u.newBookmark({title: u.bmTitle})
+			u.folderId_ = bn.id
+		}
+	
+		u.historyId_ = await u.findBookmarkId(u.bmHistoryTitle)
+		if (u.historyId_ === "") {
+			bn = await u.newBookmark({title: u.bmHistoryTitle, parentId: folder})
+			u.historyId_ = bn.id
+		}
+	},
   //
   bmTitle: "bmtab-bn4yaq",
   bmHistoryTitle: "history-bn4yaq",
-  folderId: () => u.findBookmarkId(u.bmTitle),
-  historyId: () => u.findBookmarkId(u.bmHistoryTitle),
+  folderId: async () => {
+		if (u.folderId_ === "") {
+			u.folderId_ = await u.findBookmarkId(u.bmTitle)
+		}
+		return u.folderId_
+	},
+	folderId_: "",
+  historyId: async () => {
+		if (u.historyId_ === "") {
+			u.historyId_ = await u.findBookmarkId(u.bmHistoryTitle)
+		}
+		return u.historyId_
+	},
+	historyId_: "",
 	favIcon: "icons/favicon.png",
 }

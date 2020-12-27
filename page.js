@@ -65,8 +65,8 @@ async function listTabs() {
 }
 
 async function listBookmarks() {
-	let folderId = await u.folderId()
-	let bms = await u.listBookmarks(folderId)
+	let folder = await u.folderId()
+	let bms = await u.listBookmarks(folder)
 	let entries = []
 	for (let b of bms) {
 		if (!b.url) {
@@ -88,6 +88,10 @@ async function matchEntries() {
 	//console.log(vm.columns)
   for (let col of vm.columns) {
     for (let ei of col.entries) {
+			if (ei.removed) {
+				ei.unmatched = true
+				continue
+			}
 			ei.unmatched = false
       let title = ei.title.toUpperCase()
       for (let kw of kws) {
@@ -100,7 +104,7 @@ async function matchEntries() {
   }
 }
 
-function selectFirstEntry() {
+async function selectFirstEntry() {
 	//console.log("selectfirstentry")
 	for (let col of vm.columns) {
 		for (let ei of col.entries) {
@@ -112,13 +116,27 @@ function selectFirstEntry() {
 	}
 }
 
-function selectEntry(ei) {
+async function selectEntry(ei) {
 	//console.log("selectentry"); console.log(ei)
 	if (ei.id.startsWith("t-")) {
-		gotoTab(parseInt(ei.id.substring(2)))
+		await gotoTab(parseInt(ei.id.substring(2)))
 	} else {
+		if (!isTopBookmark(ei)) {
+			// move bookmark entry to top
+			await u.addBookmark(ei.title, ei.url)
+		}
 		window.location = ei.url
 	}
+}
+
+function isTopBookmark(ei) {
+	let entries = vm.columns[1].entries
+	for (let i = 0; i < entries.length; i++) {
+		if (entries[i].id === ei.id) {
+			return i < 5
+		}
+	}
+	return false
 }
 
 async function gotoTab(tid) {
@@ -136,15 +154,8 @@ async function removeEntry(ei) {
 	ei.removed = true
 	let id = ei.id.substring(2)
 	if (ei.id.startsWith("b-")) {
-		removeBookmark(id, ei.title, ei.url)
+		u.removeBookmark(id, ei.title, ei.url)
 	} else {
 		chrome.tabs.remove(parseInt(id))
 	}	
-}
-
-async function removeBookmark(id, title, url) {
-	let historyId = await u.historyId()
-	let bn = await u.newBookmark({parentId: historyId, index: 0, title: title, url: url})
-	await u.dedupBookmark(historyId, bn.id, url)
-	await u.removeBookmark(id)
 }
