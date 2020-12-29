@@ -31,7 +31,7 @@
 								<a
 									:id="ei.id"
 									class="entry-link"
-									@click="selectEntry(ei)"
+									@click.prevent="selectEntry(ei)"
 									:href="ei.url">
 									<img class="favicon" :src="ei.favIcon" alt="" @error="setAltImg"> {{ei.title}}
 								</a>

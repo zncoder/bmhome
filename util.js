@@ -21,18 +21,23 @@ var u = {
     }
   },
   dedupBookmark: async (folder, keep, url) => {
-		//console.log(`dedup ${folder}:${url}`)
+		//console.log(`dedup ${folder}:${keep},${url}`)
     let items = await u.listBookmarks(folder)
+		let todo = []
 	  for (let x of items) {
+			//console.log(`bookmark url:${url}`)
 		  if (x.id !== keep && x.url === url) {
-			  u.deleteBookmark(x.id)
+				//console.log(`dedup remove ${x.id}`)
+			  todo.push(u.deleteBookmark(x.id))
 		  }
 	  }
+		await Promise.all(todo)
   },
 	addBookmark: async (title, url) => {
 		//console.log(`addbookmark: ${title},${url}`)
 		let folder = await u.folderId()
 		let bn = await u.newBookmark({parentId: folder, index: 0, title: title, url: url})
+		//console.log(`new bookmark added ${bn.id}`)
 		await u.dedupBookmark(folder, bn.id, url)
 		return bn
 	},

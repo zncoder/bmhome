@@ -121,7 +121,7 @@ async function selectEntry(ei) {
 	if (ei.id.startsWith("t-")) {
 		await gotoTab(parseInt(ei.id.substring(2)))
 	} else {
-		if (!isTopBookmark(ei)) {
+		if (!inTopN(ei, 2)) {
 			// move bookmark entry to top
 			await u.addBookmark(ei.title, ei.url)
 		}
@@ -129,11 +129,11 @@ async function selectEntry(ei) {
 	}
 }
 
-function isTopBookmark(ei) {
+function inTopN(ei, n) {
 	let entries = vm.columns[1].entries
-	for (let i = 0; i < entries.length; i++) {
+	for (let i = 0; i < n; i++) {
 		if (entries[i].id === ei.id) {
-			return i < 5
+			return true
 		}
 	}
 	return false
