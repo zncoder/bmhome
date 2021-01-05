@@ -121,7 +121,7 @@ async function selectEntry(ei) {
 	if (ei.id.startsWith("t-")) {
 		await gotoTab(parseInt(ei.id.substring(2)))
 	} else {
-		if (!inTopN(ei, 2)) {
+		if (!inTopN(ei, 10)) {
 			// move bookmark entry to top
 			await u.addBookmark(ei.title, ei.url)
 		}
