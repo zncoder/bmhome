@@ -30,7 +30,13 @@ async function onCreated() {
 		}
 	]
 	//console.log(`columns:`); console.log(vm.columns)
-	vm.$refs.searchbox.focus()
+
+	// keyword
+	chrome.omnibox.setDefaultSuggestion({
+		description: "Search opened tabs and bookmarks"
+	})
+	chrome.omnibox.onInputChanged.addListener(omniboxMatchEntries)
+	chrome.omnibox.onInputEntered.addListener(omniboxSelectEntry)
 }
 
 function newEntry(id, title, favIcon, url) {
@@ -84,24 +90,29 @@ function guessFavIcon(url) {
 
 async function matchEntries() {
 	//console.log(`matchentries ${vm.searchWords}`)
-  let kws = vm.searchWords.toUpperCase().split(/ +/).filter(w => w.length > 0)
+	let kws = vm.searchWords.toUpperCase().split(/ +/).filter(w => w.length > 0)
 	//console.log(vm.columns)
-  for (let col of vm.columns) {
-    for (let ei of col.entries) {
+	let matched = []
+	for (let col of vm.columns) {
+		for (let ei of col.entries) {
 			if (ei.removed) {
 				ei.unmatched = true
 				continue
 			}
 			ei.unmatched = false
-      let title = ei.title.toUpperCase()
-      for (let kw of kws) {
-        if (title.indexOf(kw) < 0) {
+			let title = ei.title.toUpperCase()
+			for (let kw of kws) {
+				if (title.indexOf(kw) < 0) {
 					ei.unmatched = true
 					break
-        }
-      }
-    }
-  }
+				}
+			}
+			if (!ei.unmatched) {
+				matched.push(ei)
+			}
+		}
+	}
+	return matched
 }
 
 async function selectFirstEntry() {
@@ -143,11 +154,11 @@ async function gotoTab(tid) {
 	let tab = await u.getTab(tid)
 	let cw = await u.currentWindow()
 	let cur = await u.currentTab()
-  if (cw.id != tab.windowId) {
-    chrome.windows.update(tab.windowId, {focused: true})
-  }
-  chrome.tabs.update(tab.id, {active: true})
-  chrome.tabs.remove(cur.id)
+	if (cw.id != tab.windowId) {
+		chrome.windows.update(tab.windowId, {focused: true})
+	}
+	chrome.tabs.update(tab.id, {active: true})
+	chrome.tabs.remove(cur.id)
 }
 
 async function removeEntry(ei) {
@@ -158,4 +169,31 @@ async function removeEntry(ei) {
 	} else {
 		chrome.tabs.remove(parseInt(id))
 	}	
+}
+
+async function omniboxMatchEntries(text, suggest) {
+	vm.searchWords = text
+	let matched = await matchEntries()
+	suggest(matched.map(ei => {
+		return {
+			content: ei.url,
+			description: ei.title,
+		}
+	}))
+}
+
+function omniboxSelectEntry(text, disposition) {
+	if (text.indexOf("://") < 0) {
+		selectFirstEntry()
+		return
+	}
+	
+	for (let col of vm.columns) {
+		for (let ei of col.entries) {
+			if (!ei.removed && !ei.unmatched && ei.url === text) {
+				selectEntry(ei)
+				return
+			}
+		}
+	}
 }
