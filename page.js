@@ -3,6 +3,7 @@ var vm = new Vue({
 	data: {
 		columns: [],
 		searchWords: "",
+		showSearchBox: false,
 	},
 	created: onCreated,
 	methods: {
@@ -10,6 +11,7 @@ var vm = new Vue({
 		selectFirstEntry: selectFirstEntry,
 		selectEntry: ei => selectEntry(ei),
 		removeEntry: ei => removeEntry(ei),
+		showSearch: showSearch,
 		setAltImg: ev => {ev.target.src = u.favIcon},
 	},
 })
@@ -37,6 +39,11 @@ async function onCreated() {
 	})
 	chrome.omnibox.onInputChanged.addListener(omniboxMatchEntries)
 	chrome.omnibox.onInputEntered.addListener(omniboxSelectEntry)
+}
+
+function showSearch() {
+	vm.showSearchBox = true
+	setTimeout(() => vm.$refs.searchbox.focus(), 10)
 }
 
 function newEntry(id, title, favIcon, url) {

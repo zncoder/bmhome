@@ -3,22 +3,24 @@
   <head>
     <meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="page.css">
+		<title>New Tab: Tabs and Bookmarks</title>
   </head>
 	<body>
 		<div id="app">
-			<div id="header">
-				<span class="hdr-span"></span>
+			<div v-show="showSearchBox" id="header">
 				<input
 					ref="searchbox"
 					class="hdr-box"
 					autocomplete="off"
-					placeholder="Type words to search open tabs or bookmarks"
+					placeholder='Use keyword "bm" in address bar or type words here to search open tabs or bookmarks'
 					v-model="searchWords"
 					@keyup="matchEntries"
 					@keyup.enter="selectFirstEntry" />
-				<span class="hdr-span"></span>
 			</div>
-			<div id="content">
+			<div v-show="!showSearchBox" class="hdr-btn">
+				<button class="search-btn" @click="showSearch"><img src="icons/search.svg"></button>
+			</div>
+		<div id="content">
 				<template v-for="col in columns">
 					<div
 						class="column"

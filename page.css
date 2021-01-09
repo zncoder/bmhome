@@ -7,13 +7,14 @@ body {
 		position: fixed;
 		top: 0px;
 		left: 0px;
-		z-index: 2;
+		right: 0px;
+		/* z-index: 2; */
 		font-size: 1em;
-		background-color: ghostwhite;
-		width: 100%;
-		padding: 0.8em;
+		/* background-color: ghostwhite; */
+		/* width: 98%; */
+		/* padding: 0.8em; */
 		letter-spacing: 1px;
-		display: flex;
+		/* display: flex; */
 }
 
 .hdr-span {
@@ -23,7 +24,9 @@ body {
 }
 
 .hdr-box {
-		flex: 8;
+		/* flex: 8; */
+		width: 97%;
+		margin: 0.4em;
 		font-size: 1em;
 		outline: 0px;
 		border: solid #bbbbbb;
@@ -31,13 +34,28 @@ body {
 		border-width: 2px;
 		padding-left: 12px;
 		padding-right: 12px;
-		padding-top: 0.5em;
-		padding-bottom: 0.5em;
+		padding-top: 0.2em;
+		padding-bottom: 0.2em;
 }
 
 .hdr-box:focus {
 		border: solid #5b9e4d;
 		border-width: 2px;
+}
+
+.hdr-btn {
+		position: relative;
+		float: right;
+}
+
+.search-btn {
+		border: 0;
+		background-color: Transparent;
+}
+
+.search-btn > img {
+		/* height: 24px; */
+		/* weight: 24px; */
 }
 
 ul {
@@ -68,7 +86,7 @@ ul {
 }
 
 .col-name {
-		margin-top: 4em;
+		margin-top: 0em;
 		margin-bottom: 0;
 		color: #555;
 }
