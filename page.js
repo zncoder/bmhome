@@ -181,12 +181,22 @@ async function removeEntry(ei) {
 async function omniboxMatchEntries(text, suggest) {
 	vm.searchWords = text
 	let matched = await matchEntries()
-	suggest(matched.map(ei => {
+	let res = matched.map(ei => {
 		return {
 			content: ei.url,
-			description: ei.title,
+			description: escapeText(ei.title),
 		}
-	}))
+	})
+	//console.log(`text:${text} => `); console.log(res)
+	suggest(res)
+}
+
+function escapeText(s) {
+	return s.replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;")
 }
 
 function omniboxSelectEntry(text, disposition) {
